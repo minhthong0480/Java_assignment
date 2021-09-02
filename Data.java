@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -7,7 +8,7 @@ import java.util.*;
 public class Data {
     String area;
     String zone;
-    //String [] RangeOfTime;
+    String [] RangeOfTime;
     String [] userInputString;
 
     int days;
@@ -23,18 +24,22 @@ public class Data {
     Scanner sc = new Scanner(System.in);
 
     //constructor
-//    public Data(String zone, LocalDate startDate, LocalDate endDate) {
-//        this.zone = zone;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.RangeOfTime = RangeOfTime;
-//    }
 
     public Data() {
+    }
+
+    public Data(String zone, LocalDate startDate, LocalDate endDate, String[] RangeOfTime) {
         this.zone = zone;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.RangeOfTime = RangeOfTime;
     }
+
+//    public Data() {
+//        this.zone = zone;
+//        this.startDate = startDate;
+//        this.endDate = endDate;
+//    }
 
     //method for users to choose their zone
     public void zoneInput(){
@@ -182,24 +187,14 @@ public class Data {
         endDate = inputDate(newInput);
     }
 
-////method to display time range
-//    public String[] timeArray(){
-//        int days = Days.daysBetween(startDate, endDate).getDays();
-//        List<LocalDate> dates = new ArrayList<LocalDate>(days);  // Set initial capacity to `days`.
-//        RangeOfTime = new String[dates.size()];
-//        for (int i=0; i < days; i++) {
-//            LocalDate d = startDate.plusDays(i);
-//            dates.add(d);
-//        }
-//    }
 
-//display date after calculate
-    public void display() {
-//        inputStartDate();
-//        inputEndDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-        System.out.printf("Time Range: %s -> %s", formatter.format(startDate),formatter.format(endDate));
-    }
+////display date after calculate
+//    public void display() {
+////        inputStartDate();
+////        inputEndDate();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+//        System.out.printf("Time Range: %s -> %s", formatter.format(startDate),formatter.format(endDate));
+//    }
 
 //method to get days from a particular day
     public void dayFrom(){
@@ -208,7 +203,10 @@ public class Data {
         days = sc.nextInt();
         //count end date
         this.endDate = this.startDate.plusDays(this.days);
-        display();
+        var lstDate =  ListOfDate(startDate, endDate);
+        for (LocalDate d : lstDate){
+            System.out.println(d);
+        }
     }
 
 //method to get weeks from a particular day
@@ -219,7 +217,10 @@ public class Data {
         //change to day
         this.days = this.weeks * 7;
         this.endDate = this.startDate.plusDays(this.days);
-        display();
+        var lstDate =  ListOfDate(startDate, endDate);
+        for (LocalDate d : lstDate){
+            System.out.println(d);
+        }
     }
 
 //method to get days to a particular date
@@ -229,7 +230,10 @@ public class Data {
         days = sc.nextInt();
         //count start date
         this.startDate = this.endDate.minusDays(this.days);
-        display();
+        var lstDate =  ListOfDate(startDate, endDate);
+        for (LocalDate d : lstDate){
+            System.out.println(d);
+        }
     }
 
 //method to get days to a particular week
@@ -240,7 +244,10 @@ public class Data {
         //convert to day
         this.days = this.weeks * 7;
         this.startDate = this.endDate.minusDays(this.days);
-        display();
+        var lstDate =  ListOfDate(startDate, endDate);
+        for (LocalDate d : lstDate){
+            System.out.println(d);
+        }
     }
 
 
@@ -248,7 +255,30 @@ public class Data {
     public void pairTime(){
         inputStartDate();
         inputEndDate();
-        display();
+        var lstDate =  ListOfDate(startDate, endDate);
+        for (LocalDate d : lstDate){
+            System.out.println(d);
+        }
+    }
+
+//display time range as a list
+    public static List<LocalDate> ListOfDate(LocalDate startdate, LocalDate enddate){
+        List<LocalDate> dates = new ArrayList<LocalDate>();
+
+        //convert localdate variable to date
+        Date beginDate = Date.from(startdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDate = Date.from(enddate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(beginDate);
+
+        while (calendar.getTime().before(endDate)){
+            LocalDate result = calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();;
+            dates.add(result);
+            calendar.add(Calendar.DATE, 1);
+        }
+        dates.add(enddate);
+        return dates;
     }
 }
 
