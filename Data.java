@@ -171,6 +171,53 @@ public class Data {
                 newInput = String.join("/",userInputString[0],userInputString[1],userInputString[2]);
             }
         }
+
+        if (userInput.contains("/")){
+            userInputString = userInput.split("/");
+            int month = Integer.parseInt(userInputString[0]);
+            int day = Integer.parseInt(userInputString[1]);
+            int year = Integer.parseInt(userInputString[2]);
+
+//condition for user input
+            if (month < 1 || month > 12){
+                System.out.println("You input an invalid month. Please try again");
+                inputDate();
+            }
+
+            if (day < 1 || day > 31){
+                System.out.println("You input an invalid date. Please try again");
+                inputDate();
+            }
+
+            if (month == 2)
+                if(day > 29) {
+                    System.out.println("Invalid day. Try again");
+                    inputDate();
+                }
+
+            if(year != 2020 && year != 2021){
+                System.out.println("Only 2020 and 2021 is valid. Please try again");
+                inputDate();
+            }
+
+//special case for condition
+            if (month == 2)
+                if (day == 29)
+                    if (year == 2020) {
+                        System.out.println("Invalid date. There is no 2-29 in 2020. Please try again");
+                        inputDate();
+                    }
+
+
+//loop until user input a valid date
+            for (int i = 0; i < userInputString.length; i++) {
+                newInput = userInput;
+            }
+//convert user input into "/"
+            for (int i = 0; i < userInputString.length; i++){
+                newInput = String.join("/",userInputString[0],userInputString[1],userInputString[2]);
+            }
+        }
     }
 
 //method for starDate input
